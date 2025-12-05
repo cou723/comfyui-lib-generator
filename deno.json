@@ -1,5 +1,5 @@
 {
-  "name": "@cou723/comfyui-lib-generator",
+  "name": "@coucha/comfyui-client-generator",
   "version": "0.1.0",
   "exports": {
     ".": "./src/cli.ts"
