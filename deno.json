@@ -1,0 +1,11 @@
+{
+  "name": "@cou723/comfyui-lib-generator",
+  "version": "0.1.0",
+  "exports": {
+    ".": "./src/cli.ts"
+  },
+  "tasks": {
+    "generate": "deno run -A src/cli.ts"
+  },
+  "license": "MIT"
+}
