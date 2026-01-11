@@ -1,0 +1,5 @@
+# Generated libraries
+libs/
+
+# Output directory
+output/

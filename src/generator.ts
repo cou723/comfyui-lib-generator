@@ -227,9 +227,10 @@ function buildInputInitializer(
       return `stringInput({${renderOptions(required, {
         enumValues: typeOrChoices as string[],
         defaultValue,
+        expectedType: "string",
       })}})`;
     }
-    return `stringInput({${renderOptions(required, { defaultValue })}})`;
+    return `stringInput({${renderOptions(required, { defaultValue, expectedType: "string" })}})`;
   }
 
   if (typeof typeOrChoices !== "string") {
@@ -240,22 +241,23 @@ function buildInputInitializer(
     return `connectionInput({${renderOptions(required, {
       kind: typeOrChoices,
       defaultValue,
+      expectedType: "connection",
     })}})`;
   }
 
   if (NUMBER_TYPES.has(typeOrChoices)) {
-    return `numberInput({${renderOptions(required, { defaultValue })}})`;
+    return `numberInput({${renderOptions(required, { defaultValue, expectedType: "number" })}})`;
   }
 
   if (BOOLEAN_TYPES.has(typeOrChoices)) {
-    return `booleanInput({${renderOptions(required, { defaultValue })}})`;
+    return `booleanInput({${renderOptions(required, { defaultValue, expectedType: "boolean" })}})`;
   }
 
   if (STRING_TYPES.has(typeOrChoices)) {
-    return `stringInput({${renderOptions(required, { defaultValue })}})`;
+    return `stringInput({${renderOptions(required, { defaultValue, expectedType: "string" })}})`;
   }
 
-  return `stringInput({${renderOptions(required, { defaultValue })}})`;
+  return `stringInput({${renderOptions(required, { defaultValue, expectedType: "string" })}})`;
 }
 
 function renderOptions(
@@ -264,6 +266,7 @@ function renderOptions(
     kind?: string;
     defaultValue?: unknown;
     enumValues?: string[];
+    expectedType?: "number" | "string" | "boolean" | "connection";
   },
 ): string {
   const pieces = [`required: ${required}`];
@@ -273,8 +276,15 @@ function renderOptions(
   if (opts.enumValues) {
     pieces.push(`enum: ${JSON.stringify(opts.enumValues)} as const`);
   }
-  if (!required && opts.defaultValue !== undefined && isPrimitiveDefault(opts.defaultValue)) {
-    pieces.push(`default: ${JSON.stringify(opts.defaultValue)}`);
+  const dv = opts.defaultValue;
+  const et = opts.expectedType;
+  const okDefault = !required && dv !== undefined && (
+    (et === "number" && typeof dv === "number") ||
+    (et === "boolean" && typeof dv === "boolean") ||
+    (et === "string" && typeof dv === "string")
+  );
+  if (okDefault) {
+    pieces.push(`default: ${JSON.stringify(dv)}`);
   }
   return ` ${pieces.join(", ")} `;
 }

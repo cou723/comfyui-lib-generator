@@ -7,5 +7,10 @@
   "tasks": {
     "generate": "deno run -A src/cli.ts"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "publish": {
+    "exclude": [
+      "examples/**"
+    ]
+  }
 }
