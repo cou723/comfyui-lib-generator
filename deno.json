@@ -1,6 +1,18 @@
 {
   "name": "@coucha/comfyui-client-generator",
-  "version": "0.1.0",
+  "version": "0.1.2",
+  "description": "Generate type-safe TypeScript bindings for ComfyUI nodes with compile-time type checking and IDE autocomplete",
+  "keywords": [
+    "comfyui",
+    "code-generator",
+    "typescript",
+    "dsl",
+    "type-safe",
+    "workflow",
+    "node-bindings",
+    "stable-diffusion",
+    "ai-image-generation"
+  ],
   "exports": {
     ".": "./src/cli.ts"
   },

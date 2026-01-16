@@ -37,15 +37,43 @@ await generateLibrary({ objectInfoPath, libraryRoot });
 console.log(`Generated ComfyUI bindings at ${libraryRoot}`);
 
 async function installTemplate(libraryTarget: string, force: boolean) {
-  const templateRoot = fromFileUrl(
-    new URL("./templates/lib/comfy-ui", import.meta.url),
-  );
-
   const hasCore = await exists(join(libraryTarget, "core"));
   if (hasCore && !force) {
     return;
   }
 
   await ensureDir(dirname(libraryTarget));
-  await copy(templateRoot, libraryTarget, { overwrite: true });
+
+  const templateBaseUrl = new URL("./templates/lib/comfy-ui/", import.meta.url);
+
+  // Template files to copy
+  const templateFiles = [
+    "index.ts",
+    "core/types.ts",
+    "core/graph.ts",
+    "nodes/index.ts",
+  ];
+
+  // Check if we're running from a local file or remote URL
+  if (templateBaseUrl.protocol === "file:") {
+    // Local execution: use file system copy
+    const templateRoot = fromFileUrl(templateBaseUrl);
+    await copy(templateRoot, libraryTarget, { overwrite: true });
+  } else {
+    // Remote execution (JSR): fetch files via HTTPS
+    for (const file of templateFiles) {
+      const sourceUrl = new URL(file, templateBaseUrl);
+      const targetPath = join(libraryTarget, file);
+
+      await ensureDir(dirname(targetPath));
+
+      const response = await fetch(sourceUrl.href);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch ${sourceUrl.href}: ${response.statusText}`);
+      }
+
+      const content = await response.text();
+      await Deno.writeTextFile(targetPath, content);
+    }
+  }
 }
