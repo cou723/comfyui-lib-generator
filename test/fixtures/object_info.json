@@ -1,0 +1,148 @@
+{
+  "CheckpointLoaderSimple": {
+    "input": {
+      "required": {
+        "ckpt_name": ["STRING", {
+          "default": "model1.safetensors"
+        }]
+      }
+    },
+    "output": ["MODEL", "VAE"],
+    "name": "CheckpointLoaderSimple"
+  },
+  "CheckpointLoader": {
+    "input": {
+      "required": {
+        "ckpt_name": ["STRING", {
+          "default": "model2.ckpt"
+        }]
+      }
+    },
+    "output": ["MODEL", "VAE", "CLIP"],
+    "name": "CheckpointLoader"
+  },
+  "KSampler": {
+    "input": {
+      "required": {
+        "model": ["MODEL"],
+        "positive": ["CONDITIONING"],
+        "negative": ["CONDITIONING"],
+        "latent_image": ["LATENT"],
+        "seed": ["INT", {
+          "default": 0,
+          "min": 0,
+          "max": 18446744073709551615
+        }],
+        "steps": ["INT", {
+          "default": 20,
+          "min": 1,
+          "max": 10000
+        }],
+        "cfg": ["FLOAT", {
+          "default": 8,
+          "min": 0,
+          "max": 100
+        }],
+        "sampler_name": ["STRING", {
+          "default": "euler"
+        }],
+        "scheduler": ["STRING", {
+          "default": "normal"
+        }],
+        "denoise": ["FLOAT", {
+          "default": 1,
+          "min": 0,
+          "max": 1
+        }]
+      }
+    },
+    "output": ["LATENT"],
+    "name": "KSampler"
+  },
+  "CLIPTextEncode": {
+    "input": {
+      "required": {
+        "clip": ["CLIP"],
+        "text": ["STRING", {
+          "default": "",
+          "multiline": true
+        }]
+      }
+    },
+    "output": ["CONDITIONING"],
+    "name": "CLIPTextEncode"
+  },
+  "VAEDecode": {
+    "input": {
+      "required": {
+        "samples": ["LATENT"],
+        "vae": ["VAE"]
+      }
+    },
+    "output": ["IMAGE"],
+    "name": "VAEDecode"
+  },
+  "EmptyLatentImage": {
+    "input": {
+      "required": {
+        "width": ["INT", {
+          "default": 512,
+          "min": 64,
+          "max": 8192
+        }],
+        "height": ["INT", {
+          "default": 512,
+          "min": 64,
+          "max": 8192
+        }],
+        "batch_size": ["INT", {
+          "default": 1,
+          "min": 1,
+          "max": 64
+        }]
+      }
+    },
+    "output": ["LATENT"],
+    "name": "EmptyLatentImage"
+  },
+  "LoraLoader": {
+    "input": {
+      "required": {
+        "model": ["MODEL"],
+        "clip": ["CLIP"],
+        "lora_name": ["STRING", {
+          "default": "lora1.safetensors"
+        }],
+        "strength_model": ["FLOAT", {
+          "default": 1,
+          "min": -10,
+          "max": 10
+        }],
+        "strength_clip": ["FLOAT", {
+          "default": 1,
+          "min": -10,
+          "max": 10
+        }]
+      }
+    },
+    "output": ["MODEL", "CLIP"],
+    "name": "LoraLoader"
+  },
+  "LoraLoaderModelOnly": {
+    "input": {
+      "required": {
+        "model": ["MODEL"],
+        "lora_name": ["STRING", {
+          "default": "lora2.safetensors"
+        }],
+        "strength_model": ["FLOAT", {
+          "default": 1,
+          "min": -10,
+          "max": 10
+        }]
+      }
+    },
+    "output": ["MODEL"],
+    "name": "LoraLoaderModelOnly"
+  }
+}

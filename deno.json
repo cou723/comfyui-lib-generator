@@ -17,7 +17,9 @@
     ".": "./src/cli.ts"
   },
   "tasks": {
-    "generate": "deno run -A src/cli.ts"
+    "generate": "deno run -A src/cli.ts",
+    "type-check": "deno check src/cli.ts src/generator.ts src/scanner.ts",
+    "test": "deno run -A test/test.ts"
   },
   "license": "MIT",
   "publish": {

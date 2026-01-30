@@ -10,7 +10,7 @@ import { resolve } from "jsr:@std/path@1/resolve";
 import { generateLibrary } from "./generator.ts";
 
 const args = parseArgs(Deno.args, {
-  string: ["object-info", "out"],
+  string: ["object-info", "out", "checkpoint-dir"],
   boolean: ["force"],
   alias: {
     o: "object-info",
@@ -24,6 +24,9 @@ const args = parseArgs(Deno.args, {
 
 const objectInfoPath = resolve(args["object-info"] ?? "object_info.json");
 const libraryRoot = resolve(args["out"]);
+const checkpointDir = args["checkpoint-dir"]
+  ? resolve(args["checkpoint-dir"])
+  : undefined;
 const force = Boolean(args["force"]);
 
 if (!(await exists(objectInfoPath))) {
@@ -32,7 +35,7 @@ if (!(await exists(objectInfoPath))) {
 }
 
 await installTemplate(libraryRoot, force);
-await generateLibrary({ objectInfoPath, libraryRoot });
+await generateLibrary({ objectInfoPath, libraryRoot, checkpointDir });
 
 console.log(`Generated ComfyUI bindings at ${libraryRoot}`);
 

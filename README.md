@@ -23,8 +23,31 @@ You can rename the scope/package inside `deno.json` before publishing.
    - `--object-info` defaults to `./object_info.json`.
    - `--out` defaults to `./lib/comfy-ui`.
    - `--force` reinstalls the static template files before regenerating types.
+   - `--checkpoint-dir` scans the specified directory for `.ckpt` and `.safetensors` files and generates a union type for checkpoint names.
 
 3. Commit the resulting `lib/comfy-ui` (including the `generated` directory) wherever you need it.
+
+### Type checking
+
+To run type checking on the source files:
+
+```sh
+deno task type-check
+```
+
+### Testing
+
+To verify the generator produces valid type definitions:
+
+```sh
+deno task test
+```
+
+This will:
+1. Generate bindings using test fixtures (`test/fixtures/object_info.json` and `test/fixtures/checkpoints`)
+2. Run type checking on all generated files
+
+The test output is written to `test/output/` (gitignored).
 
 ## Publishing to JSR
 
