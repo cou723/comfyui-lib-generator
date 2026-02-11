@@ -178,3 +178,22 @@ export const defineNode = <
 ): NodeDef<Name, Inputs, Outputs> => {
   return def as NodeDef<Name, Inputs, Outputs>;
 };
+
+/**
+ * ノード定義から特定の入力パラメーターの値の型を抽出する
+ *
+ * @example
+ * ```ts
+ * type CheckpointNameType = ExtractInputValueType<
+ *   typeof CheckpointLoaderSimple,
+ *   'ckpt_name'
+ * >;
+ * // => "illustrias\\alcaiAnimehaven_awakeningV30.safetensors" | ...
+ * ```
+ */
+export type ExtractInputValueType<
+  NodeDef extends { inputs: Record<string, InputSpec<unknown>> },
+  Key extends keyof NodeDef['inputs']
+> = NodeDef['inputs'][Key] extends InputSpec<infer T>
+  ? T
+  : never;

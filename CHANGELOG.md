@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.0] - 2025-02-11
+
+### Added
+- `ExtractInputValueType` - ノード定義から特定の入力パラメーターの値の型を抽出するヘルパー型
+
 ## [0.3.0] - 2025-02-11
 
 ### Changed
