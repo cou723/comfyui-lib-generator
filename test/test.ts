@@ -19,7 +19,6 @@ async function main() {
   // ジェネレーターを実行
   const cliPath = join(__dirname, "..", "src", "cli.ts");
   const objectInfoPath = join(fixtureDir, "object_info.json");
-  const checkpointDir = join(fixtureDir, "checkpoints");
 
   const command = new Deno.Command(Deno.execPath(), {
     args: [
@@ -28,8 +27,6 @@ async function main() {
       cliPath,
       "--object-info",
       objectInfoPath,
-      "--checkpoint-dir",
-      checkpointDir,
       "--out",
       outputDir,
     ],
@@ -50,7 +47,6 @@ async function main() {
       join(outputDir, "generated", "nodes.gen.ts"),
       join(outputDir, "generated", "registry.gen.ts"),
       join(outputDir, "generated", "kinds.gen.ts"),
-      join(outputDir, "generated", "checkpoints.gen.ts"),
       join(outputDir, "core", "types.ts"),
       join(outputDir, "core", "graph.ts"),
     ],
